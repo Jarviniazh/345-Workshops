@@ -54,12 +54,12 @@ namespace seneca
 	    m_time = time;
 	}
 
-	std::ostream& operator<<(std::ostream& os, Reservation& res){
+	std::ostream& operator<<(std::ostream& os, const Reservation& res){
         os << "Reservation ";
 
         os.setf(std::ios::right);
         os.width(10);
-        os << res.m_id << ":";
+        os << res.m_id << ": ";
         os.width(20);
         os << res.m_name << "  ";
 
@@ -93,5 +93,14 @@ namespace seneca
         os<<std::endl;
         return os;
 	}
+
+    //Reservation::Reservation(const Reservation&);
+    //Reservation::Reservation(Reservation&&);
+    //Reservation& Reservation::operator=(const Reservation&);
+    //Reservation& Reservation::operator=(Reservation&&);
+    //Reservation::~Reservation();
+
+
+
 }
 

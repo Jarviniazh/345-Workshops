@@ -7,8 +7,22 @@ namespace seneca
 {
 	class ConfirmationSender
 	{
-		const Reservation** m_reservations;
-		size_t m_size;
+		const Reservation** m_pReservations{};
+		size_t m_numReservation{};
+	public:
+		ConfirmationSender() {};
+		//rule of 5
+		ConfirmationSender(const ConfirmationSender&);
+		ConfirmationSender& operator=(const ConfirmationSender&);
+		ConfirmationSender(ConfirmationSender&&);
+		ConfirmationSender& operator=(ConfirmationSender&&);
+		~ConfirmationSender();
+
+		ConfirmationSender& operator+=(const Reservation& res);
+		ConfirmationSender& operator-=(const Reservation& res);
+
+		friend std::ostream& operator<<(std::ostream&, const ConfirmationSender&);
+
 	};
 }
 

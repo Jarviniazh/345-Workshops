@@ -16,13 +16,22 @@ namespace seneca
 	    int m_day {};
 	    //the hour when the party expects to come (for simplicity, the hour is an integer between 1 and 24)
 	    int m_time {};
+
 	public:
 	    Reservation(){};
 	    Reservation(const std::string&);
 	    void update(int day, int time);
 		std::string removeSpace(const std::string& s);
 
-	    friend std::ostream& operator<<(std::ostream&, Reservation&);
+	    friend std::ostream& operator<<(std::ostream&, const Reservation&);
+
+		//Part 2
+		//Rule of 5
+		Reservation(const Reservation& source)=default;
+		Reservation& operator=(const Reservation& source) = default;
+		Reservation(Reservation&& source) = default;
+		Reservation& operator=(Reservation&& source) = default;
+		~Reservation() = default;
 	};
 
 
