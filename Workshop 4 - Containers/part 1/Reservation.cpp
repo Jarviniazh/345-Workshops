@@ -59,7 +59,7 @@ namespace seneca
 
         os.setf(std::ios::right);
         os.width(10);
-        os << res.m_id << ":";
+        os << res.m_id << ": ";
         os.width(20);
         os << res.m_name << "  ";
 
