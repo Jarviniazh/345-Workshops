@@ -20,13 +20,18 @@ namespace seneca
 	public:
 	    Reservation(){};
 	    Reservation(const std::string&);
+
+		//a modifier that receives as parameters a new day and time for the reservation and updates the attributes with received values.
 	    void update(int day, int time);
+
+		//remove leading and trailing spaces from a string
 		std::string removeSpace(const std::string& s);
 
+		//overload the insertion operator to insert the contents of a reservation object into an ostream object
 	    friend std::ostream& operator<<(std::ostream&, const Reservation&);
 
 		//Part 2
-		//Rule of 5
+		//default rule of 5
 		Reservation(const Reservation& source)=default;
 		Reservation& operator=(const Reservation& source) = default;
 		Reservation(Reservation&& source) = default;

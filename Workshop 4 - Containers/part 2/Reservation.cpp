@@ -2,20 +2,17 @@
 #include <iostream>
 #include <string>
 
-//#include <algorithm> 
-//#include <cctype>    
-
 #include "Reservation.h"
 
 namespace seneca
 {
 	Reservation::Reservation(const std::string& res){
         size_t startPos = 0;
-        size_t endPos = res.find(':');
+        size_t endPos = res.find(':'); //colon after id
         m_id = removeSpace(res.substr(startPos, endPos - startPos));
 
         startPos = endPos + 1;
-        endPos = res.find(',', startPos);
+        endPos = res.find(',', startPos); //comma after name
         m_name = removeSpace(res.substr(startPos, endPos - startPos));
 
         startPos = endPos + 1;
@@ -35,18 +32,16 @@ namespace seneca
 
     }
 
-    //std::string Reservation::removeSpace(std::string str) {
-    //    str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
-    //    return str;
-    //}
-
-    std::string Reservation::removeSpace(const std::string& s) {
-        size_t first = s.find_first_not_of(' ');
-        size_t last = s.find_last_not_of(' ');
-        if (first == std::string::npos || last == std::string::npos) // All spaces
+    //Function from StackOverflow: https://stackoverflow.com/questions/25829143/trim-whitespace-from-a-string
+    std::string Reservation::removeSpace(const std::string& str)
+    {
+        size_t first = str.find_first_not_of(' '); // find index of first none space character, If str only contains spaces, find_first_not_of returns std::string::npos.
+        if (first == std::string::npos) //If str only contains spaces, return empty string
             return "";
-        return s.substr(first, (last - first + 1));
+        size_t last = str.find_last_not_of(' '); // find index of last character that is not a space
+        return str.substr(first, (last - first + 1));// return: a substring starting from first none space character to last none space character
     }
+
 
 
 	void Reservation::update(int day, int time){
@@ -93,14 +88,6 @@ namespace seneca
         os<<std::endl;
         return os;
 	}
-
-    //Reservation::Reservation(const Reservation&);
-    //Reservation::Reservation(Reservation&&);
-    //Reservation& Reservation::operator=(const Reservation&);
-    //Reservation& Reservation::operator=(Reservation&&);
-    //Reservation::~Reservation();
-
-
 
 }
 

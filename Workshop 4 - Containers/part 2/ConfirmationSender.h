@@ -7,8 +7,9 @@ namespace seneca
 {
 	class ConfirmationSender
 	{
-		const Reservation** m_pReservations{};
-		size_t m_numReservation{};
+		//This module should maintain a dynamically allocated array of pointers to objects of type Reservation
+		const Reservation** m_pReservations{}; //
+		size_t m_numReservation{}; //number of reservations
 	public:
 		ConfirmationSender() {};
 		//rule of 5
@@ -18,9 +19,11 @@ namespace seneca
 		ConfirmationSender& operator=(ConfirmationSender&&);
 		~ConfirmationSender();
 
+		//adds the reservation res to the array by adding its address.
 		ConfirmationSender& operator+=(const Reservation& res);
+		//removes the reservation res from the array by removing its address
 		ConfirmationSender& operator-=(const Reservation& res);
-
+		//overload the insertion operator to insert the content of a ConfirmationSender object into an ostream object:
 		friend std::ostream& operator<<(std::ostream&, const ConfirmationSender&);
 
 	};
