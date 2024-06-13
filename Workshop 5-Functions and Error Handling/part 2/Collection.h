@@ -9,10 +9,10 @@ namespace seneca
 	template <typename T>
 	class Collection
 	{
-		T* m_items;
-		std::string m_name;
-		size_t m_size;
-		void (*m_observer)(const Collection<T>&, const T&);
+		T* m_items {};
+		std::string m_name {};
+		size_t m_size{};
+		void (*m_observer)(const Collection<T>&, const T&){};
 	public:
 		Collection(const std::string& name) : m_items{nullptr}, m_name{name}, m_size{0}, m_observer{nullptr} {};
 
@@ -39,6 +39,7 @@ namespace seneca
 			m_observer = observer;
 		}
 
+
 		Collection<T>& operator+=(const T& item)
 		{
 			for(auto i = 0u; i< m_size; ++i)
@@ -55,9 +56,10 @@ namespace seneca
 				temp[i] = m_items[i];
 			}
 			temp[m_size] = item;
-			m_size++;
+			
 			delete[] m_items;
 			m_items = temp;
+			m_size++;
 
 			if(m_observer != nullptr)
 			{

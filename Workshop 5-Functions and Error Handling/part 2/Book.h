@@ -28,7 +28,7 @@ namespace seneca
 		template <typename T>
 		void fixSpelling(T& spellChecker) //this function calls the overloaded operator() on the instance spellChecker, passing to it the book description.
 		{
-			
+			spellChecker(m_desc);
 		}
 
 		

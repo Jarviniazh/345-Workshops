@@ -14,13 +14,14 @@ namespace seneca
 		Movie(){};
 		Movie(const std::string& strMovie); //receives the movie through a reference to a string.
 		const std::string& title() const;  //a query that returns the title of the movie
+		std::string removeSpace(const std::string&);
 
 		friend std::ostream& operator<<(std::ostream&, const Movie&);
 
 		template <typename T>
 		void fixSpelling(T& spellChecker) //a templated function.
 		{
-			
+			spellChecker(m_desc);
 		}
 	};
 }

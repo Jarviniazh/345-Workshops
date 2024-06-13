@@ -1,16 +1,35 @@
 #include <iostream>
+#include <string>
 #include "Movie.h"
 
 namespace seneca
 {
 	Movie::Movie(const std::string& strMovie)
 	{
-		
+		size_t startPos = 0;
+		size_t endPos = strMovie.find(','); 
+		m_title = removeSpace(strMovie.substr(startPos, endPos - startPos));
+
+		startPos = endPos + 1;
+		endPos = strMovie.find(',', startPos);
+		m_year = std::stoul(removeSpace(strMovie.substr(startPos, endPos - startPos)));
+
+		startPos = endPos + 1;
+		m_desc = removeSpace(strMovie.substr(startPos));
 	}
 
 	const std::string& Movie::title() const
 	{
 		return m_title;
+	}
+
+	std::string Movie::removeSpace(const std::string& str)
+	{
+		size_t first = str.find_first_not_of(' '); 
+		if (first == std::string::npos) 
+			return "";
+		size_t last = str.find_last_not_of(' '); 
+		return str.substr(first, (last - first + 1));
 	}
 
 	std::ostream& operator<<(std::ostream& os, const Movie& movie)
@@ -21,7 +40,6 @@ namespace seneca
 			os << movie.m_title << " | ";
 			os.width(4);
 			os << movie.m_year << " | " << movie.m_desc << std::endl;
-
 		}
 		return os;
 	}

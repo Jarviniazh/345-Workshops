@@ -77,6 +77,7 @@ namespace seneca
 			os.width(6);
 			os << book.m_price << " | ";
 			os << book.m_desc << std::endl;
+			os.unsetf(std::ios::fixed);
 		}
 		return os;
 	}
