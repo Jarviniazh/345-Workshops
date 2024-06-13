@@ -13,7 +13,7 @@ namespace seneca
 		std::string m_desc{};
 	public:
 		Book() {};
-		Book(const std::string& strBook); //a constructor that receives a reference to an unmodifiable string that contains information about the book
+		Book(const std::string&); //a constructor that receives a reference to an unmodifiable string that contains information about the book
 
 		const std::string& title() const; // a query that returns the title of the book
 		const std::string& country() const; // a query that returns the publication country
