@@ -57,43 +57,37 @@ int main(int argc, char** argv)
 		std::ifstream file(argv[1]);
 		if (!file)
 		{
-			std::cerr << "AppErrors::CannotOpenFile\n";
+			std::cerr << AppErrors::CannotOpenFile << std::endl;
 			return 1;
 		}
-
 		
 		std::string strBook;
-		size_t index = 0; // 
-		while (index < 4&&std::getline(file, strBook)  ) 
-		{
-			if (!strBook.empty() && strBook[0] != '#') 
-			{
-				library += seneca::Book(strBook);
-				++index;
-			}
-		}
-		//debug
-		//std::cout << "first 4\n";
-		//std::cout << library;
+		size_t index = 0; //the index of book record in the file 
+		while (std::getline(file, strBook))
+        {
+            if (!strBook.empty() && strBook[0] != '#')
+            {
+				//read the first 4 books
+            	if(index < 4) {
+                    library += seneca::Book(strBook);
+                    ++index;
+                    continue;
+                }
 
-		/*
-		 ♪ Hey, I just met you,      ♪
-		 ♪ And this is crazy,        ♪
-		 ♪ But here's my number.     ♪    (register the observer)
-		 ♪ So, if something happens, ♪    (event)
-		 ♪ Call me, maybe?           ♪    (callback)
-		 */
-		library.setObserver(bookAddedObserver);
+		    /*
+		     ♪ Hey, I just met you,      ♪
+		     ♪ And this is crazy,        ♪
+		     ♪ But here's my number.     ♪    (register the observer)
+		     ♪ So, if something happens, ♪    (event)
+		     ♪ Call me, maybe?           ♪    (callback)
+		     */
+				library.setObserver(bookAddedObserver);
 
-		// TODO: add the rest of the books from the file.
-		while (std::getline(file, strBook)) {
-			if (!strBook.empty() && strBook[0] != '#') {
-				library += seneca::Book(strBook);
-				//debug
-				//std::cout << "added----------------------------\n";
-				//std::cout << library;
-			}
-		}
+                // TODO: add the rest of the books from the file.
+				//read the rest of the books
+                library += seneca::Book(strBook);
+            }
+        }
 		file.close();
 
 	}
@@ -135,9 +129,8 @@ int main(int argc, char** argv)
 	// TODO (from part #1): iterate over the library and update the price of each book
 	//         using the lambda defined above.
 	for (auto i = 0u; i < library.size(); ++i)
-	{
 		fixPrice(library[i]);
-	}
+	
 
 
 	std::cout << "-----------------------------------------\n";
@@ -159,13 +152,13 @@ int main(int argc, char** argv)
 		std::ifstream file(argv[2]);
 		if (!file)
 		{
-			std::cerr << "AppErrors::CannotOpenFile\n";
+			std::cerr << AppErrors::CannotOpenFile << std::endl;
 			return 1;
 		}
 
 		std::string strMovie;
-		size_t index = 0; // 
-		while (std::getline(file, strMovie) && index < 5) 
+		size_t index = 0;
+		while (index < 5 && std::getline(file, strMovie)) 
 		{
 			if (!strMovie.empty() && strMovie[0] != '#') 
 			{
@@ -174,7 +167,6 @@ int main(int argc, char** argv)
 			}
 		}
 		file.close();
-
 	}
 
 	std::cout << "-----------------------------------------\n";
@@ -212,7 +204,11 @@ int main(int argc, char** argv)
 	}
 	catch (std::out_of_range& e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cout << "** EXCEPTION: " << e.what() << std::endl;
+	}
+	catch (...)
+	{
+		std::cout << "** EXCEPTION: An unknown exception has occurred." << std::endl;
 	}
 	
 
@@ -243,7 +239,11 @@ int main(int argc, char** argv)
 		}
 		catch (const char* e)
 		{
-			std::cout << e << std::endl;
+			std::cout << "** EXCEPTION: " << e << std::endl;
+		}
+		catch (...)
+		{
+			std::cout << "** EXCEPTION: An unknown exception has occurred." << std::endl;
 		}
 
 

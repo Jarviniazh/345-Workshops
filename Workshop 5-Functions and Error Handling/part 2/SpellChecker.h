@@ -7,7 +7,7 @@ namespace seneca
 	{
 		std::string m_badWords[6]{};
 		std::string m_goodWords[6]{};
-		size_t m_numReplace[6] = { 0 };
+		size_t m_numReplace[6]{};  //how many times each bad word has been replaced
 	public:
 		SpellChecker(const char* filename);
 		void operator()(std::string& text);  //this operator searches text and replaces any misspelled word with the correct version.

@@ -6,6 +6,17 @@ namespace seneca
 {
 	Book::Book(const std::string& strBook)
 	{
+		if(strBook.empty())
+		{
+			m_authour = "";
+			m_title = "";
+			m_country = "";
+			m_price = 0.0;
+			m_year = 0;
+			m_desc = "";
+			return;
+		}
+
 		size_t startPos = 0;
 		size_t endPos = strBook.find(','); //comma after author
 		m_authour = removeSpace(strBook.substr(startPos, endPos - startPos));
@@ -53,16 +64,20 @@ namespace seneca
 
 	std::string Book::removeSpace(const std::string& str)
 	{
-		size_t first = str.find_first_not_of(' '); // find index of first none space character, If str only contains spaces, find_first_not_of returns std::string::npos.
-		if (first == std::string::npos) //If str only contains spaces, return empty string
-			return "";
-		size_t last = str.find_last_not_of(' '); // find index of last character that is not a space
-		return str.substr(first, (last - first + 1));// return: a substring starting from first none space character to last none space character
+		if (!str.empty())
+		{
+			size_t first = str.find_first_not_of(' ');
+			if (first == std::string::npos)
+				return "";
+			size_t last = str.find_last_not_of(' ');
+			return str.substr(first, (last - first + 1));
+		}
+		return "";
 	}
 
 	std::ostream& operator<<(std::ostream& os, const Book& book)
 	{
-		if(!book.m_authour.empty())
+		if(!book.m_authour.empty() && !book.m_title.empty() && !book.m_country.empty() && !book.m_desc.empty() && book.m_year > 0)
 		{
 			os.width(20);
 			os<<book.m_authour << " | ";

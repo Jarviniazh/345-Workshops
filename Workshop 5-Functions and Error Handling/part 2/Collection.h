@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <exception>
 
 namespace seneca
 {
@@ -16,6 +17,7 @@ namespace seneca
 	public:
 		Collection(const std::string& name) : m_items{nullptr}, m_name{name}, m_size{0}, m_observer{nullptr} {};
 
+		//this class doesn't support any copy operations; delete all of them.
 		Collection(const Collection& other) = delete;
 		Collection& operator=(const Collection& other) = delete;
 
@@ -42,6 +44,7 @@ namespace seneca
 
 		Collection<T>& operator+=(const T& item)
 		{
+			//If item is already in the collection, this function does nothing.
 			for(auto i = 0u; i< m_size; ++i)
 			{
 				if(m_items[i].title() == item.title())
@@ -49,7 +52,7 @@ namespace seneca
 					return *this;
 				}
 			}
-
+			//resizes the array of items to accommodate the new item
 			T* temp = new T[m_size + 1];
 			for (auto i = 0u; i < m_size; ++i)
 			{
@@ -61,6 +64,7 @@ namespace seneca
 			m_items = temp;
 			m_size++;
 
+			//if an observer has been registered, this operator calls the observer function passing the current object (*this) and the new item as arguments.
 			if(m_observer != nullptr)
 			{
 				m_observer(*this, item);
@@ -72,18 +76,22 @@ namespace seneca
 		{ 
 			if (idx >= m_size) 
 			{
-				throw std::out_of_range("** EXCEPTION: Bad index [" + std::to_string(idx) + "]. Collection has [" + std::to_string(m_size) + "] items.");
+				std::string msg = "Bad index [" + std::to_string(idx) + "]. Collection has [" + std::to_string(m_size) + "] items.";
+				throw std::out_of_range(msg);
 			}
 			return m_items[idx];
 		}
 
 		T* operator[](const std::string& title) const
 		{
-			for(auto i = 0u; i < m_size; ++i)
+			if (!title.empty())
 			{
-				if(m_items[i].title() == title)
+				for (auto i = 0u; i < m_size; ++i)
 				{
-					return &m_items[i];
+					if (m_items[i].title() == title)
+					{
+						return &m_items[i];
+					}
 				}
 			}
 			return nullptr;
@@ -91,10 +99,12 @@ namespace seneca
 
 		friend std::ostream& operator<<(std::ostream& os, const Collection<T>& collection)
 		{
-			for(auto i = 0u; i < collection.size(); ++i)
+			if(collection.m_size > 0)
 			{
-				os << collection[i];
+				for(auto i = 0u; i < collection.m_size; ++i)
+					os << collection[i];
 			}
+			
 			return os;
 		}
 	};

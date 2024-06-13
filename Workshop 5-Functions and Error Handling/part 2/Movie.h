@@ -1,6 +1,5 @@
 #ifndef SENECA_MOVIE_H
 #define SENECA_MOVIE_H
-#include "SpellChecker.h"
 
 namespace seneca
 {
@@ -19,8 +18,9 @@ namespace seneca
 		friend std::ostream& operator<<(std::ostream&, const Movie&);
 
 		template <typename T>
-		void fixSpelling(T& spellChecker) //a templated function.
+		void fixSpelling(T& spellChecker) //a templated function, passing to it the movie title and description.
 		{
+			spellChecker(m_title);
 			spellChecker(m_desc);
 		}
 	};

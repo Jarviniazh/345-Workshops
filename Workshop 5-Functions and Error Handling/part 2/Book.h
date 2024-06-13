@@ -1,8 +1,6 @@
 #ifndef SENECA_BOOK_H
 #define SENECA_BOOK_H
 
-#include "SpellChecker.h"
-
 namespace seneca
 {
 	class Book
@@ -30,8 +28,6 @@ namespace seneca
 		{
 			spellChecker(m_desc);
 		}
-
-		
 	};
 }
 
