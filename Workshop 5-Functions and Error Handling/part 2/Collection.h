@@ -48,16 +48,12 @@ namespace seneca
 			for(auto i = 0u; i< m_size; ++i)
 			{
 				if(m_items[i].title() == item.title())
-				{
 					return *this;
-				}
 			}
 			//resizes the array of items to accommodate the new item
 			T* temp = new T[m_size + 1];
 			for (auto i = 0u; i < m_size; ++i)
-			{
 				temp[i] = m_items[i];
-			}
 			temp[m_size] = item;
 			
 			delete[] m_items;
@@ -66,9 +62,8 @@ namespace seneca
 
 			//if an observer has been registered, this operator calls the observer function passing the current object (*this) and the new item as arguments.
 			if(m_observer != nullptr)
-			{
 				m_observer(*this, item);
-			}
+
 			return *this;
 		}
 
@@ -89,9 +84,7 @@ namespace seneca
 				for (auto i = 0u; i < m_size; ++i)
 				{
 					if (m_items[i].title() == title)
-					{
 						return &m_items[i];
-					}
 				}
 			}
 			return nullptr;

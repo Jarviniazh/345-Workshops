@@ -18,6 +18,9 @@ namespace seneca
 			std::string line;
 			size_t index = 0;
 			//load the bad words and good words from the file
+			while (index < 6 && file >> m_badWords[index] >> m_goodWords[index])
+				++index;
+
 			//while(std::getline(file, line) && index < 6)
 			//{
 			//	std::stringstream ss(line);
@@ -26,9 +29,6 @@ namespace seneca
 			//	++index;
 			//}
 			//other way to read file: cin >> str1 >> str2;
-	
-			while (index < 6 && file >> m_badWords[index] >> m_goodWords[index])
-				++index;
 		}
 		file.close();
 	}
@@ -42,12 +42,8 @@ namespace seneca
 				size_t pos = text.find(m_badWords[i]);
 				while (pos != std::string::npos) 
 				{
-					//debug
-					//std::cout << "Replacing: " << m_badWords[i] << " at position: " << pos << std::endl;
 					text.replace(pos, m_badWords[i].size(), m_goodWords[i]);
 					m_numReplace[i]++; //increment the number of replacements
-					//debug
-					//std::cout << "--------Replaced Bad word [" << m_badWords[i] << "] with num " << m_numReplace[i] << std::endl;
 					pos = text.find(m_badWords[i], pos + m_goodWords[i].size());
 				}
 			}

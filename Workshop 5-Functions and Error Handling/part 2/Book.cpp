@@ -81,12 +81,16 @@ namespace seneca
 		{
 			os.width(20);
 			os<<book.m_authour << " | ";
+
 			os.width(22);
 			os<< book.m_title << " | ";
+
 			os.width(5);
 			os << book.m_country << " | ";
+
 			os.width(4);
 			os << book.m_year << " | ";
+
 			os.setf(std::ios::fixed);
 			os.precision(2);
 			os.width(6);
