@@ -33,16 +33,16 @@ namespace seneca
 		for (size_t i = 0; i < 6; ++i) {
 			size_t pos = text.find(m_badWords[i]);
 			while (pos != std::string::npos) {
-				std::cout << "Replacing: " << m_badWords[i] << " at position: " << pos << std::endl;
+				//debug
+				//std::cout << "Replacing: " << m_badWords[i] << " at position: " << pos << std::endl;
 				text.replace(pos, m_badWords[i].size(), m_goodWords[i]);
 				m_numReplace[i]++;
-				std::cout << "--------Replaced Bad word [" << m_badWords[i] << "] with num " << m_numReplace[i] << std::endl;
+				//debug
+				//std::cout << "--------Replaced Bad word [" << m_badWords[i] << "] with num " << m_numReplace[i] << std::endl;
 				pos = text.find(m_badWords[i], pos + m_goodWords[i].size());
 			}
 		}
 	}
-
-
 
 	void SpellChecker::showStatistics(std::ostream& out) const
 	{
@@ -51,7 +51,7 @@ namespace seneca
 		{
 			out.width(15);
 			out.setf(std::ios::right);
-			out << m_badWords[i] << ": " << m_numReplace[i] << "4 replacements\n";
+			out << m_badWords[i] << ": " << m_numReplace[i] << "replacements\n";
 			out.unsetf(std::ios::right);
 		}
 	}

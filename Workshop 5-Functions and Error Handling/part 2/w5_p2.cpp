@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 		
 		std::string strBook;
 		size_t index = 0; // 
-		while (std::getline(file, strBook) && index < 4) 
+		while (index < 4&&std::getline(file, strBook)  ) 
 		{
 			if (!strBook.empty() && strBook[0] != '#') 
 			{
@@ -72,9 +72,9 @@ int main(int argc, char** argv)
 				++index;
 			}
 		}
-		
-		std::cout << "first 4\n";
-		std::cout << library;
+		//debug
+		//std::cout << "first 4\n";
+		//std::cout << library;
 
 		/*
 		 ♪ Hey, I just met you,      ♪
@@ -89,8 +89,9 @@ int main(int argc, char** argv)
 		while (std::getline(file, strBook)) {
 			if (!strBook.empty() && strBook[0] != '#') {
 				library += seneca::Book(strBook);
-				std::cout << "added----------------------------\n";
-				std::cout << library;
+				//debug
+				//std::cout << "added----------------------------\n";
+				//std::cout << library;
 			}
 		}
 		file.close();
@@ -128,7 +129,7 @@ int main(int argc, char** argv)
 	std::cout << "-----------------------------------------\n";
 	std::cout << "The library content\n";
 	std::cout << "-----------------------------------------\n";
-	//std::cout << library;
+	std::cout << library;
 	std::cout << "-----------------------------------------\n\n";
 
 	// TODO (from part #1): iterate over the library and update the price of each book
