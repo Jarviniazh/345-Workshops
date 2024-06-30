@@ -7,7 +7,7 @@ namespace seneca
 {
 		class Directory: public Resource
 		{
-			std::vector<Resource>m_contents;
+			std::vector<Resource*>m_contents;
 		public:
 			//a custom constructor that receives the name of the directory as a string and uses it to initialize the Directory object.
 			Directory(const std::string& name);
@@ -26,7 +26,7 @@ namespace seneca
 			//adds a resource to the directory and returns a reference to the current directory. 
 			Directory& operator+=(Resource*);
 			//finds and returns the address of a resource in the directory whose name matches the given string or nullptr if a match is not found. 
-			Resource* find(const std::string&, const std::vector<OpFlags>&);
+			Resource* find(const std::string&, const std::vector<OpFlags>& flag = {});
 			//a destructor that deallocates memory for each resource that this directory holds.
 			~Directory();
 			//this class should not allow copy / move operations.
