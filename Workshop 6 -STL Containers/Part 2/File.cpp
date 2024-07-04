@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "File.h"
 #include "Flags.h"
 

@@ -1,7 +1,7 @@
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <fstream>
+#include <vector>
 #include "Filesystem.h"
 #include "File.h"
 
@@ -149,6 +149,6 @@ namespace seneca
 	Filesystem::~Filesystem()
 	{
 		delete m_root;
-		
+		//delete m_current;
 	}
 }
