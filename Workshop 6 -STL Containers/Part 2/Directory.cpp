@@ -1,9 +1,9 @@
 #include <iostream>
-#include <vector>
 #include <string>
 #include <algorithm>
 #include "Directory.h"
 #include "Flags.h"
+
 
 namespace seneca
 {
@@ -11,6 +11,8 @@ namespace seneca
 	Directory::Directory(const std::string& name)
 	{
 		m_name = name;
+		//std::cout << "----------------------------------------------\n";
+		//std::cout << "Creating Directory with name: " << name << std::endl;
 	}
 
 	//sets the parent path to the parameter.
@@ -99,6 +101,7 @@ namespace seneca
 			//if the RECURSIVE flag is in the second parameter, this member will also attempt to recursively find a match in each directory that is in the m_contents vector.
 			if (isRecursive && res->type() == NodeType::DIR) {
 				Directory* dir = dynamic_cast<Directory*>(res);
+
 				if (dir != nullptr) {
 					Resource* found = dir->find(name, flags);
 					if (found != nullptr) 
@@ -112,23 +115,16 @@ namespace seneca
 	//a destructor that deallocates memory for each resource that this directory holds.
 	Directory::~Directory()
 	{
-		for (auto res : m_contents) 
-			delete res;  
+		//std::cout << "----------------------------------------------\n";
+		//std::cout << "Destroying Directory with name: " << m_name << std::endl;
+		for (auto& res : m_contents) {
+			delete res;
+		}
 	}
-
 
 	//Part 2
 	void Directory::remove(const std::string& name, const std::vector<OpFlags>& flags)
 	{
-		//bool isRecursive = false;
-		//for (auto flag : flags)
-		//{
-		//	if (flag == OpFlags::RECURSIVE)
-		//	{
-		//		isRecursive = true;
-		//		break;
-		//	}
-		//}
 		bool isRecursive = std::find(flags.begin(), flags.end(), OpFlags::RECURSIVE) != flags.end();
 
 		for (auto member = m_contents.begin(); member != m_contents.end(); ++member) 

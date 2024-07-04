@@ -25,8 +25,7 @@ namespace seneca
 		size_t size() const;
 		//a query that returns Flags::FILE.
 		NodeType type() const;
-	
-
-
+		~File() {};
+		//virtual ~File() { std::cout << "Destroying File with name: " << name() << std::endl; };
 	};
 }

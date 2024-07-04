@@ -42,6 +42,5 @@ namespace seneca
 			void remove(const std::string&, const std::vector<OpFlags>& flags ={});
 			void display(std::ostream&, const std::vector<FormatFlags>& flags = {}) const;
 
-			
 		};
 }
