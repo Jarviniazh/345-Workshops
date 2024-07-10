@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <exception>
 #include "Filesystem.h"
 #include "File.h"
 
@@ -60,9 +61,17 @@ namespace seneca
 			{
 				if (i == pathParts.size() - 1 && !fileContents.empty()) //file without a directory
 				{ 
-					//create file and add it to the current directory
-					File* newFile = new File(pathParts[i], fileContents);
-					*currentDir += newFile;
+					//check if the file already exists
+					if(!currentDir->find(pathParts[i]))
+					{
+						//create file and add it to the current directory
+						File* newFile = new File(pathParts[i], fileContents);
+						*currentDir += newFile;
+					}
+					else
+					{
+						throw "File already exists in the directory!";
+					}
 				}
 				else // directory path
 				{
@@ -150,6 +159,7 @@ namespace seneca
 	//Destructor
 	Filesystem::~Filesystem()
 	{
+		//Debugging
 		//std::cout << "----------------------------------------------\n";
 		//std::cout << "Filesystem destructor called" << std::endl;
 		delete m_root;

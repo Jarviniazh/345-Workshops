@@ -11,6 +11,7 @@ namespace seneca
 	Directory::Directory(const std::string& name)
 	{
 		m_name = name;
+		//Debugging
 		//std::cout << "----------------------------------------------\n";
 		//std::cout << "Creating Directory with name: " << name << std::endl;
 	}
@@ -91,7 +92,7 @@ namespace seneca
 		//	}
 		//}
 
-		bool isRecursive = std::find(flags.begin(), flags.end(), OpFlags::RECURSIVE) != flags.end();
+		bool isRecursive = std::find(flags.begin(), flags.end(), OpFlags::RECURSIVE) != flags.end(); //using algorithm
 
 
 		for (auto& res : m_contents) {
@@ -115,6 +116,7 @@ namespace seneca
 	//a destructor that deallocates memory for each resource that this directory holds.
 	Directory::~Directory()
 	{
+		//Debugging
 		//std::cout << "----------------------------------------------\n";
 		//std::cout << "Destroying Directory with name: " << m_name << std::endl;
 		for (auto& res : m_contents) {
