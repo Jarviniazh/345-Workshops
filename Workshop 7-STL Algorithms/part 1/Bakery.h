@@ -28,6 +28,7 @@ namespace seneca
 		//print the content of the collection into the parameter. Use the insertion operator
 		void showGoods(std::ostream& os) const;
 
+		//Helper function to remove leading and trailing spaces
 		std::string removeSpace(const std::string&);
 	};
 
