@@ -22,9 +22,6 @@ namespace seneca
 	class Bakery
 	{
 		std::vector<BakedGood> m_goods{}; //manages a collection of objects of type BakedGood
-		//part 2
-		size_t m_totalStock{}; //total stock of all items in the collection
-		double m_totalPrice{}; //total price of all items in the collection
 	public:
 		Bakery() {};
 		//a custom constructor that receives as a parameter the name of the file containing the information about the BakedGoods to be added to the collection.
@@ -37,13 +34,13 @@ namespace seneca
 
 		//Part 2
 		//receives a parameter the name of the field used to sort the collection in ascending order.
-		void sortBakery();
+		void sortBakery(const std::string&);
 		//receives a parameter of another Bakery object reference and combines the collection of BakedGoods from the current object and the parameter and returns the combined collection.
-		std::vector<BakedGood> combine();
+		std::vector<BakedGood> combine(const Bakery&);
 		// receives the Description of a BakedGood and a BakedType as parameters, and returns true if the collection contains Stock of that BakedGood.
-		bool inStock() const;
+		bool inStock(const std::string&, BakedType) const;
 		//receives a BakedType as a parameter, and returns the list of all the out of stock items in the collection.
-		std::list<BakedGood> outOfStock() const;
+		std::list<BakedGood> outOfStock(BakedType) const;
 	};
 
 	//Helper function
