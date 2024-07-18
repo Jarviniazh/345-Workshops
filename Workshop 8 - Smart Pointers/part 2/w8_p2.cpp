@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 			if (dB->GetValue("Leylah Fernandez", value) == seneca::Err_Status::Err_Success)
 				std::cout << "Leylah Fernandez earned " << value << std::endl;
 			else
-				std::cout << "Unable to retrieve earnings for Leylah Fernandez.\n";
+				std::cout << "Unable to retrieve earnings for Leylah Fernandez. \n";
 		}
 	}
 
