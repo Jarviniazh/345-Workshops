@@ -1,6 +1,12 @@
 #ifndef SENECA_DATABASE_H
 #define SENECA_DATABASE_H
 #include <memory>
+#include <algorithm>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 namespace seneca
 {
@@ -12,9 +18,9 @@ namespace seneca
 	};
 
 	template<typename T>
-	class Database
+    class Database
     {
-        static std::shared_ptr<Database> m_db; //store the address of the one and only instance of type Database
+		static std::shared_ptr<Database> m_db; //store the address of the one and only instance of type Database
         size_t m_numEntries{}; //A variable representing the number of entries in the database.
         std::string m_keys[20]{};//A statically - allocated array of strings representing the keys.The size of this array is 20.
         T m_values[20]{};//A statically - allocated array of strings representing the values.The size of this array is 20.
@@ -24,13 +30,12 @@ namespace seneca
         {
             //prints to the screen the address of the current instance and the prototype of the constructor
             std::cout << std::hex;
-            std::cout << std::hex << "[" << this << "]" << " Database(const std::string&)" << std::dec<< std::endl;
+            std::cout << std::hex << "[" << this << "]" << " Database(const std::string&)" << std::dec << std::endl;
             //opens the file and read the key/value pairs into the attributes
             std::ifstream file(filename);
 
             std::string key{}, valueStr{}, line{};
             T value{};
-
             while (m_numEntries < 20 && std::getline(file, line))
             {
                 size_t pos = line.find(" ");
@@ -46,7 +51,6 @@ namespace seneca
                 //std::cout << key << "        orignal: " << valueStr << std::endl;
                 std::istringstream(valueStr) >> value;
 
-
                 encryptDecrypt(value);
                 //std::cout << key << "        encrpty: " << value << std::endl;
                 m_keys[m_numEntries] = key;
@@ -60,13 +64,13 @@ namespace seneca
 
 
     public:
-        static std::shared_ptr<Database<T>> getInstance(const std::string& filename);
-//        {
-//            if (!m_db) {
-//                m_db = std::shared_ptr<Database<T>>(new Database<T>(filename)); // Directly use new with std::shared_ptr
-//            }
-//            return m_db;
-//        }
+        static std::shared_ptr<Database> getInstance(const std::string& filename);
+        //        {
+        //            if (!m_db) {
+        //                m_db = std::shared_ptr<Database<T>>(new Database<T>(filename)); // Directly use new with std::shared_ptr
+        //            }
+        //            return m_db;
+        //        }
 
         Err_Status GetValue(const std::string& key, T& value) const  //a query that searches in the array of keys for a the first parameter
         {
@@ -89,10 +93,10 @@ namespace seneca
                 //If there is space in the database(the capacity of the array not been reached), the key / value pair is added and the function returns Err_Success
                 m_keys[m_numEntries] = key;
                 m_values[m_numEntries++] = value;
-//                std::cout << "data after add 1 \n";
-//                for(auto i = 0u; i < m_numEntries; ++i){
-//                    std::cout << i <<" key: " << m_keys[i] << " value: " << m_values[i] << std::endl;
-//                }
+                //std::cout << "data after add 1 \n";
+                //for(auto i = 0u; i < m_numEntries; ++i){
+                //    std::cout << i <<" key: " << m_keys[i] << " value: " << m_values[i] << std::endl;
+                //}
                 return Err_Status::Err_Success;
             }
             return Err_Status::Err_OutOfMemory;
@@ -100,7 +104,7 @@ namespace seneca
 
         ~Database() //destructor
         {
-            std::cout << std:: hex << "[" << this << "]" << " ~Database()" << std::dec << std::endl;
+            std::cout << std::hex << "[" << this << "]" << " ~Database()" << std::dec << std::endl;
 
             std::string backup = m_filename + ".bkp.txt";
             std::ofstream file(backup);
@@ -113,7 +117,6 @@ namespace seneca
                 file << std::setw(25) << std::left << m_keys[i] << " -> " << m_values[i] << "\n";
 
                 //std::cout << "****** after encrypt: " << m_keys[i] << " -> " << m_values[i] << std::endl;
-
             }
             file.close();
         }
@@ -125,12 +128,12 @@ namespace seneca
     template<typename T>
     std::shared_ptr<Database<T>> Database<T>::getInstance(const std::string& filename)
     {
-    	//if the class Database has not been instantiated  then this function creates an instance of type Database (using the private constructor) and stores it in the static attribute.
-    	if (Database<T>::m_db.use_count() == 0)
-    	{
-    		Database<T>::m_db = std::shared_ptr<Database<T>>(new Database<T>(filename));
-    	}
-    	return Database<T>::m_db;
+        //if the class Database has not been instantiated  then this function creates an instance of type Database (using the private constructor) and stores it in the static attribute.
+        if (m_db.use_count() == 0)
+        {
+            m_db = std::shared_ptr<Database<T>>(new Database(filename));
+        }
+        return m_db;
     }
 
     //Specialization
@@ -143,12 +146,14 @@ namespace seneca
         /*foreach character C in the parameter
             foreach character K in the secret
             C = C ^ K*/
-        for (auto& c : value) {
-            for (auto j = 0u; j < sizeof(secret); ++j) {
-                c = c ^ secret[j];
+
+    	for (auto& c : value) {
+            for (auto i = 0u; i < sizeof(secret) -1; ++i) {
+                c = c ^ secret[i];
             }
         }
     }
+
     //specialize the encryptDecrypt() for the type long long as following(pseudocode)
     template<>
     void Database<long long>::encryptDecrypt(long long& value)
@@ -158,17 +163,16 @@ namespace seneca
         /*	foreach byte B in the parameter
                 foreach character K in the secret
                 B = B ^ K*/
-        char* bytePtr = reinterpret_cast<char*>(&value);
-        size_t numBytes = sizeof(long long);
-        size_t secretLength = sizeof(secret) - 1;
 
-        // Encrypting process
-        for (auto i = 0u; i < numBytes; ++i) {
-            for (auto j = 0u; j < secretLength; ++j) {
+    	char* bytePtr = reinterpret_cast<char*>(&value);
+
+        for (auto i = 0u; i < sizeof(long long); ++i) {
+            for (auto j = 0u; j < sizeof(secret) - 1; ++j) {
                 bytePtr[i] = bytePtr[i] ^ secret[j];
             }
         }
-    
+
+	}
 
 }
 
