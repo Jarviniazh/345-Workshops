@@ -8,6 +8,7 @@
 #include <thread>
 #include "ProcessData.h"
 
+
 namespace seneca
 {
 	// The following function receives array (pointer) as the first argument, number of array 
@@ -54,9 +55,16 @@ namespace seneca
 		//         into variables "total_items" and "data". Don't forget to allocate
 		//         memory for "data".
 		//       The file is binary and has the format described in the specs.
+		std::ifstream file(filename, std::ios::binary);
+		if(!file)
+		{
+			throw "Failed to open the file: " + filename;
+		}
 
+		file.read(reinterpret_cast<char*>(&total_items), 4);
+		data = new int[total_items];
 
-
+		file.read(reinterpret_cast<char*>(data), 4 * total_items);
 
 		std::cout << "Item's count in file '"<< filename << "': " << total_items << std::endl;
 		std::cout << "  [" << data[0] << ", " << data[1] << ", " << data[2] << ", ... , "
@@ -93,6 +101,66 @@ namespace seneca
 	// Save the data into a file with filename held by the argument `target_file`.
 	// Also, read the workshop instruction.
 
+	int ProcessData::operator()(const std::string& targetFilename, double& avg, double& var)
+	{
+		//computeAvgFactor(data, total_items, total_items, avg);
+		//computeVarFactor(data, total_items, total_items, avg, var);
+
+		//Part 2
+		std::vector<std::thread> threads{};
+
+	/*	auto bindAvg = std::bind(computeAvgFactor, std::placeholders::_1, std::placeholders::_2, total_items, std::placeholders::_3);
+		auto bindVar = std::bind(computeVarFactor, std::placeholders::_1, std::placeholders::_2, total_items, avg, std::placeholders::_3);*/
+
+		for(auto i = 0; i < num_threads; ++i)
+		{
+			auto start = p_indices[i];
+			auto end = p_indices[i + 1];
+			auto bindAvg = std::bind(computeAvgFactor, std::placeholders::_1, std::placeholders::_2, total_items, std::placeholders::_3);
+			threads.push_back(std::thread(bindAvg, data + start, end - start, std::ref(averages[i])));
+		}
+
+		for(auto& thread : threads)
+		{
+			thread.join();
+		}
+
+		avg = 0;
+		for(auto i = 0; i < num_threads; ++i)
+		{
+			avg += averages[i];
+		}
+
+		threads.clear();
+		for (auto i = 0; i < num_threads; ++i)
+		{
+			auto start = p_indices[i];
+			auto end = p_indices[i + 1];
+			auto bindVar = std::bind(computeVarFactor, std::placeholders::_1, std::placeholders::_2, total_items, avg, std::placeholders::_3);
+			threads.push_back(std::thread(bindVar,data + start, end - start, std::ref(variances[i])));
+		}
+
+		for (auto& thread : threads)
+		{
+			thread.join();
+		}
+		var = 0;
+		for (auto i = 0; i < num_threads; ++i)
+		{
+			var += variances[i];
+		}
+
+		std::ofstream file(targetFilename, std::ios::binary);
+		if (!file)
+		{
+			std::cout << "Failed to open the target file: " << targetFilename << std::endl;
+			return 0;
+		}
+		file.write(reinterpret_cast<char*>(&total_items), 4);
+		file.write(reinterpret_cast<char*>(data), 4 * total_items);
+	
+		return 1;
+	}
 
 
 
