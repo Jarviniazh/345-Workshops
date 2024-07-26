@@ -57,9 +57,7 @@ namespace seneca
 		//       The file is binary and has the format described in the specs.
 		std::ifstream file(filename, std::ios::binary);
 		if(!file)
-		{
 			throw "Failed to open the file: " + filename;
-		}
 
 		file.read(reinterpret_cast<char*>(&total_items), 4);
 		data = new int[total_items];
@@ -109,46 +107,37 @@ namespace seneca
 		//Part 2
 		std::vector<std::thread> threads{};
 
-	/*	auto bindAvg = std::bind(computeAvgFactor, std::placeholders::_1, std::placeholders::_2, total_items, std::placeholders::_3);
-		auto bindVar = std::bind(computeVarFactor, std::placeholders::_1, std::placeholders::_2, total_items, avg, std::placeholders::_3);*/
+		auto bindAvg = std::bind(computeAvgFactor, std::placeholders::_1, std::placeholders::_2, total_items, std::placeholders::_3);
 
 		for(auto i = 0; i < num_threads; ++i)
 		{
 			auto start = p_indices[i];
 			auto end = p_indices[i + 1];
-			auto bindAvg = std::bind(computeAvgFactor, std::placeholders::_1, std::placeholders::_2, total_items, std::placeholders::_3);
 			threads.push_back(std::thread(bindAvg, data + start, end - start, std::ref(averages[i])));
 		}
 
 		for(auto& thread : threads)
-		{
 			thread.join();
-		}
 
-		avg = 0;
 		for(auto i = 0; i < num_threads; ++i)
-		{
 			avg += averages[i];
-		}
 
 		threads.clear();
+
+		auto bindVar = std::bind(computeVarFactor, std::placeholders::_1, std::placeholders::_2, total_items, avg, std::placeholders::_3);
 		for (auto i = 0; i < num_threads; ++i)
 		{
 			auto start = p_indices[i];
 			auto end = p_indices[i + 1];
-			auto bindVar = std::bind(computeVarFactor, std::placeholders::_1, std::placeholders::_2, total_items, avg, std::placeholders::_3);
 			threads.push_back(std::thread(bindVar,data + start, end - start, std::ref(variances[i])));
 		}
 
 		for (auto& thread : threads)
-		{
 			thread.join();
-		}
-		var = 0;
+		
+		
 		for (auto i = 0; i < num_threads; ++i)
-		{
 			var += variances[i];
-		}
 
 		std::ofstream file(targetFilename, std::ios::binary);
 		if (!file)
